@@ -31,6 +31,11 @@ class Window(ui.ApplicationWindow):
             option=self.tab_index,
         )
 
+        builder.add_group(
+            label='Group',
+            content=SettingsA,
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)

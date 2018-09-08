@@ -194,9 +194,12 @@ class WidgetBuilder(object):
         layout = QtWidgets.QVBoxLayout()
         widget.setLayout(layout)
 
-        layout.addWidget(content)
+        content_widget = content()
+        content_widget._build(self.context)
 
-        return content
+        layout.addWidget(content_widget)
+
+        return widget
 
     def add_space(self):
         widget = QtWidgets.QSpacerItem(16, 16)
