@@ -416,18 +416,18 @@ class ApplicationWindow(QtWidgets.QWidget):
     def show_openfiledialog(self, title=None, filters=[]):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
-        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, title,
-                                                            filter=filter)
+        result = QtWidgets.QFileDialog.getOpenFileName(self, title,
+                                                       filter=filter)
 
-        return filename
+        return result
 
     def show_savefiledialog(self, title=None, filters=[]):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
-        filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, title,
-                                                            filter=filter)
+        result = QtWidgets.QFileDialog.getSaveFileName(self, title,
+                                                       filter=filter)
 
-        return filename
+        return result
 
     def showEvent(self, event):
         self._old_stdout = sys.stdout
