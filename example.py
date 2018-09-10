@@ -61,9 +61,9 @@ class Window(ui.ApplicationWindow):
         if result is None:
             return
 
-        filename, format = result
+        filename, filetype = result
 
-        print(f'Open "{filename}" as "{format}"')
+        print(f'Open "{filename}" as "{filetype}"')
 
     def on_save_clicked(self):
         result = self.show_savefiledialog(title='Save Python-File',
@@ -72,9 +72,9 @@ class Window(ui.ApplicationWindow):
         if result is None:
             return
 
-        filename, format = result
+        filename, filetype = result
 
-        print(f'Save "{filename}" as "{format}"')
+        print(f'Save "{filename}" as "{filetype}"')
 
 
 class Dialog(ui.Widget):
