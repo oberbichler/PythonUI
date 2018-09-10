@@ -38,18 +38,12 @@ class Window(ui.ApplicationWindow):
 
         builder.add_button(
             label='Open',
-            action=lambda ctx: print(ctx.show_openfiledialog(
-                title='Open Python-File',
-                filters='Python-Script (*.py)',
-            ))
+            action=self.on_open_clicked,
         )
 
         builder.add_button(
             label='Save',
-            action=lambda ctx: print(ctx.show_savefiledialog(
-                title='Open Python-File',
-                filters='Python-Script (*.py)',
-            ))
+            action=self.on_save_clicked,
         )
 
         builder.add_stretch()
@@ -59,6 +53,28 @@ class Window(ui.ApplicationWindow):
     def _draw(self, ax):
         ax.grid()
         ax.plot([0, 1, 2], [0, self.peak.value, 0])
+
+    def on_open_clicked(self, args):
+        result = self.show_openfiledialog(title='Open Python-File',
+                                          filters='Python-Script (*.py)')
+
+        if result is None:
+            return
+
+        filename, format = result
+
+        print(f'Open "{filename}" as "{format}"')
+
+    def on_save_clicked(self):
+        result = self.show_savefiledialog(title='Save Python-File',
+                                          filters='Python-Script (*.py)')
+
+        if result is None:
+            return
+
+        filename, format = result
+
+        print(f'Save "{filename}" as "{format}"')
 
 
 class Dialog(ui.Widget):
