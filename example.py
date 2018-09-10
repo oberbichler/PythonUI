@@ -41,6 +41,16 @@ class Window(ui.ApplicationWindow):
             items=['A', 'B'],
             option=self.tab_index)
 
+        builder.add_button(
+            label='Open',
+            action=self.on_open_clicked,
+        )
+
+        builder.add_button(
+            label='Save',
+            action=self.on_save_clicked,
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)
@@ -48,6 +58,28 @@ class Window(ui.ApplicationWindow):
     def _draw(self, ax):
         ax.grid()
         ax.plot([0, 1, 2], [0, self.peak.value, 0])
+
+    def on_open_clicked(self, args):
+        result = self.show_openfiledialog(title='Open Python-File',
+                                          filters='Python-Script (*.py)')
+
+        if result is None:
+            return
+
+        filename, filetype = result
+
+        print(f'Open "{filename}" as "{filetype}"')
+
+    def on_save_clicked(self):
+        result = self.show_savefiledialog(title='Save Python-File',
+                                          filters='Python-Script (*.py)')
+
+        if result is None:
+            return
+
+        filename, filetype = result
+
+        print(f'Save "{filename}" as "{filetype}"')
 
 
 class Dialog(ui.Widget):
