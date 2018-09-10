@@ -36,6 +36,11 @@ class Window(ui.ApplicationWindow):
             content=SettingsA,
         )
 
+        builder.add_combobox(
+            label='Select:',
+            items=['A', 'B'],
+            option=self.tab_index)
+
         builder.add_button(
             label='Open',
             action=self.on_open_clicked,
