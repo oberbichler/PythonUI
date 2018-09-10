@@ -44,6 +44,14 @@ class Window(ui.ApplicationWindow):
             ))
         )
 
+        builder.add_button(
+            label='Save',
+            action=lambda ctx: print(ctx.show_savefiledialog(
+                title='Open Python-File',
+                filters='Python-Script (*.py)',
+            ))
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)
