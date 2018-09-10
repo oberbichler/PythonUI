@@ -430,7 +430,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         dialog.show()
 
-    def show_openfiledialog(self, title=None, filters=[]):
+    def show_openfiledialog(self, title=None, filters=None):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
         result = QtWidgets.QFileDialog.getOpenFileName(self, title,
@@ -438,7 +438,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         return result
 
-    def show_savefiledialog(self, title=None, filters=[]):
+    def show_savefiledialog(self, title=None, filters=None):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
         result = QtWidgets.QFileDialog.getSaveFileName(self, title,
