@@ -36,6 +36,14 @@ class Window(ui.ApplicationWindow):
             content=SettingsA,
         )
 
+        builder.add_button(
+            label='Open',
+            action=lambda ctx: print(ctx.show_openfiledialog(
+                title='Open Python-File',
+                filters='Python-Script (*.py)',
+            ))
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)

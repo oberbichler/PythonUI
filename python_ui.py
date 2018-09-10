@@ -413,6 +413,14 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         dialog.show()
 
+    def show_openfiledialog(self, title=None, filters=[]):
+        filter = ';;'.join(filters) if isinstance(filters, list) else filters
+
+        filename, _ = QtWidgets.QFileDialog.getOpenFileName(self, title,
+                                                            filter=filter)
+
+        return filename
+
     def showEvent(self, event):
         self._old_stdout = sys.stdout
         sys.stdout = Stream(text_written=self.__write_log)
