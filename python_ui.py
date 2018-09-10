@@ -201,6 +201,23 @@ class WidgetBuilder(object):
 
         return widget
 
+    def add_combobox(self, label, items, option):
+        if label:
+            widget = QtWidgets.QLabel(label)
+            self._add_widget(widget)
+
+        widget = QtWidgets.QComboBox()
+        self._ground.addWidget(widget)
+
+        for item in items:
+            widget.addItem(str(item))
+
+        if option:
+            option.connect(widget.setCurrentIndex)
+            widget.currentIndexChanged.connect(option.change)
+
+        return widget
+
     def add_space(self):
         widget = QtWidgets.QSpacerItem(16, 16)
         self._ground.addItem(widget)
