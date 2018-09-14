@@ -424,7 +424,8 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         app.exec_()
 
-    def show_dialog(self, widget_type, title='', size=None, modal=True):
+    def show_dialog(self, widget_type, title='', size=None, modal=True,
+                    action=None):
         dialog = QtWidgets.QDialog(self, QtCore.Qt.WindowCloseButtonHint)
         dialog.setWindowTitle(title)
         dialog.setModal(modal)
@@ -440,6 +441,13 @@ class ApplicationWindow(QtWidgets.QWidget):
         layout = QtWidgets.QGridLayout()
         dialog.setLayout(layout)
         layout.addWidget(widget)
+
+        def close_dialog(message=None):
+            dialog.close()
+            if action:
+                action(message)
+
+        self.close_dialog = close_dialog
 
         dialog.show()
 
