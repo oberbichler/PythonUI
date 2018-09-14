@@ -11,6 +11,8 @@ class Window(ui.ApplicationWindow):
         self.peak = ui.Option(value=2, action=lambda: self.redraw())
         self.some_text = ui.Option(value='')
         self.tab_index = ui.Option(value=0)
+        self.letter = ui.Option(value='A')
+        self.number = ui.Option(value=0)
 
     def _build_sidebar(self, builder):
         builder.add_button(
@@ -40,6 +42,13 @@ class Window(ui.ApplicationWindow):
             label='Select:',
             items=['A', 'B'],
             option=self.tab_index)
+
+        builder.add_pages(
+            items=[
+                ('Numbers', NumberSelector),
+                ('Letters and numbers', LetterAndNumberSelector),
+            ],
+        )
 
         builder.add_button(
             label='Open',
@@ -113,6 +122,29 @@ class SettingsB(ui.Widget):
         builder.add_button(
             label='Back',
             action=lambda: builder.context.tab_index.change(0)
+        )
+
+
+class NumberSelector(ui.Widget):
+    def build(self, builder):
+        builder.add_combobox(
+            label='Select number:',
+            items=[1, 2, 3],
+            option=builder.context.number,
+        )
+
+
+class LetterAndNumberSelector(ui.Widget):
+    def build(self, builder):
+        builder.add_combobox(
+            label='Select letter:',
+            items=['A', 'B', 'C'],
+            option=builder.context.number,
+        )
+        builder.add_combobox(
+            label='Select number:',
+            items=[1, 2, 3],
+            option=builder.context.number,
         )
 
 
