@@ -467,6 +467,9 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         return result
 
+    def show_errordialog(self, message):
+        QtWidgets.QMessageBox.critical(self, 'Error', message)
+
     def showEvent(self, event):
         self._old_stdout = sys.stdout
         sys.stdout = Stream(text_written=self.__write_log)

@@ -68,6 +68,11 @@ class Window(ui.ApplicationWindow):
             action=self.on_save_clicked,
         )
 
+        builder.add_button(
+            label='Make some mistake',
+            action=lambda: self.show_errordialog('That was wrong!'),
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)
