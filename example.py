@@ -68,6 +68,11 @@ class Window(ui.ApplicationWindow):
             action=self.on_save_clicked,
         )
 
+        builder.add_button(
+            label='Make some mistake',
+            action=lambda: self.show_errordialog('That was wrong!'),
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)
@@ -160,7 +165,7 @@ class LetterAndNumberSelector(ui.Widget):
         builder.add_combobox(
             label='Select letter:',
             items=['A', 'B', 'C'],
-            option=builder.context.number,
+            option=builder.context.letter,
         )
         builder.add_combobox(
             label='Select number:',
