@@ -165,7 +165,7 @@ class LetterAndNumberSelector(ui.Widget):
         builder.add_combobox(
             label='Select letter:',
             items=['A', 'B', 'C'],
-            option=builder.context.number,
+            option=builder.context.letter,
         )
         builder.add_combobox(
             label='Select number:',
