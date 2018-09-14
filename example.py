@@ -41,7 +41,8 @@ class Window(ui.ApplicationWindow):
         builder.add_combobox(
             label='Select:',
             items=['A', 'B'],
-            option=self.tab_index)
+            option=self.tab_index,
+        )
 
         builder.add_pages(
             items=[
