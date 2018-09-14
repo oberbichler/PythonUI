@@ -72,6 +72,12 @@ class WidgetBuilder(object):
 
         return widget
 
+    def add_label(self, label):
+        widget = QtWidgets.QLabel(label)
+        self._ground.addWidget(widget)
+
+        return widget
+
     def add_button(self, label, action):
         widget = QtWidgets.QPushButton(label)
         self._ground.addWidget(widget)

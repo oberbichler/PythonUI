@@ -44,6 +44,12 @@ class Window(ui.ApplicationWindow):
             option=self.tab_index,
         )
 
+        builder.add_space()
+
+        builder.add_label(
+            label='Label example',
+        )
+
         builder.add_pages(
             items=[
                 ('Numbers', NumberSelector),
