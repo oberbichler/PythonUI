@@ -72,6 +72,12 @@ class WidgetBuilder(object):
 
         return widget
 
+    def add_label(self, label):
+        widget = QtWidgets.QLabel(label)
+        self._ground.addWidget(widget)
+
+        return widget
+
     def add_button(self, label, action):
         widget = QtWidgets.QPushButton(label)
         self._ground.addWidget(widget)
@@ -181,8 +187,8 @@ class WidgetBuilder(object):
 
         return widget
 
-    def add_pages(self, items):
-        widget = PagesWidget(items)
+    def add_pages(self, items, option=None):
+        widget = PagesWidget(self.context, items, option)
         self._ground.addWidget(widget)
 
         return widget
@@ -247,7 +253,7 @@ class Widget(QtWidgets.QWidget):
 
 
 class PagesWidget(QtWidgets.QWidget):
-    def __init__(self, pages):
+    def __init__(self, context, pages, option):
         super(PagesWidget, self).__init__()
 
         layout = QtWidgets.QVBoxLayout(self)
@@ -262,12 +268,19 @@ class PagesWidget(QtWidgets.QWidget):
         layout.addWidget(stack)
         self._stack = stack
 
-        for key, widget in pages.items():
-            self._add_page(key, widget)
+        for label, widget_type in pages:
+            content = widget_type()
+
+            builder = WidgetBuilder(content._ground, context)
+            content.build(builder)
+
+            self._add_page(label, content)
 
         combobox.currentIndexChanged.connect(self._select_index)
-        # combobox.currentIndexChanged.connect(option)
-        # option.connect(self.select_index)
+
+        if option:
+            combobox.currentIndexChanged.connect(option)
+            option.connect(self.select_index)
 
         self._select_index(0)
 
