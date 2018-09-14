@@ -109,7 +109,7 @@ class SettingsA(ui.Widget):
 
         builder.add_button(
             label='Next',
-            action=lambda: builder.context.tab_index.change(1)
+            action=lambda: builder.context.tab_index.change(1),
         )
 
 
@@ -122,7 +122,7 @@ class SettingsB(ui.Widget):
 
         builder.add_button(
             label='Back',
-            action=lambda: builder.context.tab_index.change(0)
+            action=lambda: builder.context.tab_index.change(0),
         )
 
 
