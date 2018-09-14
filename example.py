@@ -17,7 +17,8 @@ class Window(ui.ApplicationWindow):
     def _build_sidebar(self, builder):
         builder.add_button(
             label='Show dialog',
-            action=lambda: self.show_dialog(Dialog),
+            action=lambda: self.show_dialog(Dialog,
+                                            action=self.on_dialog_close),
         )
 
         builder.add_spinbox(
@@ -75,6 +76,9 @@ class Window(ui.ApplicationWindow):
         ax.grid()
         ax.plot([0, 1, 2], [0, self.peak.value, 0])
 
+    def on_dialog_close(self, message):
+        print(message)
+
     def on_open_clicked(self, args):
         result = self.show_openfiledialog(title='Open Python-File',
                                           filters='Python-Script (*.py)')
@@ -102,7 +106,17 @@ class Dialog(ui.Widget):
     def build(self, builder):
         builder.add_button(
             label='Action',
-            action=lambda: print('Action button clicked')
+            action=lambda: print('Action button clicked'),
+        )
+
+        builder.add_button(
+            label='OK',
+            action=lambda ctx: ctx.close_dialog('OK'),
+        )
+
+        builder.add_button(
+            label='Cancel',
+            action=lambda ctx: ctx.close_dialog('Cancel'),
         )
 
 
