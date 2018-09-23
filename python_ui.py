@@ -69,146 +69,146 @@ class WidgetBuilder(object):
         self._add_widget(widget)
 
     def add_label(self, label):
-        widget = QtWidgets.QLabel(label)
-        self._add_widget(widget)
+        label_widget = QtWidgets.QLabel(label)
+        self._add_widget(label_widget)
 
     def add_button(self, label, action):
-        widget = QtWidgets.QPushButton(label)
-        self._add_widget(widget)
+        button_widget = QtWidgets.QPushButton(label)
+        self._add_widget(button_widget)
 
         if len(inspect.signature(action).parameters) == 0:
-            widget.clicked.connect(action)
+            button_widget.clicked.connect(action)
         else:
-            widget.clicked.connect(lambda: action(self.context))
+            button_widget.clicked.connect(lambda: action(self.context))
 
     def add_checkbox(self, label, option):
-        widget = QtWidgets.QCheckBox(label)
-        widget.setChecked(option.value)
-        self._add_widget(widget)
+        checkbox_widget = QtWidgets.QCheckBox(label)
+        checkbox_widget.setChecked(option.value)
+        self._add_widget(checkbox_widget)
 
-        option.connect(widget.setChecked)
-        widget.clicked.connect(option.change)
+        option.connect(checkbox_widget.setChecked)
+        checkbox_widget.clicked.connect(option.change)
 
     def add_textbox(self, label, option, prefix=None, postfix=None):
         if label:
-            widget = QtWidgets.QLabel(label)
-            self._add_widget(widget)
+            label_widget = QtWidgets.QLabel(label)
+            self._add_widget(label_widget)
 
-        row = QtWidgets.QWidget()
+        row_widget = QtWidgets.QWidget()
         row_layout = QtWidgets.QHBoxLayout()
         row_layout.setContentsMargins(0, 0, 0, 0)
-        row.setLayout(row_layout)
-        self._add_widget(row)
+        row_widget.setLayout(row_layout)
+        self._add_widget(row_widget)
 
         if prefix:
-            widget = QtWidgets.QLabel(prefix)
-            row_layout.addWidget(widget)
+            prefix_widget = QtWidgets.QLabel(prefix)
+            row_layout.addWidget(prefix_widget)
 
-        widget = QtWidgets.QLineEdit()
-        widget.setText(option.value)
+        textbox_widget = QtWidgets.QLineEdit()
+        textbox_widget.setText(option.value)
 
-        row_layout.addWidget(widget, 1)
+        row_layout.addWidget(textbox_widget, 1)
 
         if option:
-            option.connect(widget.setText)
-            widget.textChanged.connect(option.change)
+            option.connect(textbox_widget.setText)
+            textbox_widget.textChanged.connect(option.change)
 
         if postfix:
-            widget = QtWidgets.QLabel(postfix)
-            row_layout.addWidget(widget)
+            postfix_widget = QtWidgets.QLabel(postfix)
+            row_layout.addWidget(postfix_widget)
 
     def add_spinbox(self, label, option, prefix=None, postfix=None,
                     dtype=float, minimum=None, maximum=None, step=None,
                     decimals=None):
         if label:
-            widget = QtWidgets.QLabel(label)
-            self._add_widget(widget)
+            label_widget = QtWidgets.QLabel(label)
+            self._add_widget(label_widget)
 
-        row = QtWidgets.QWidget()
+        row_widget = QtWidgets.QWidget()
         row_layout = QtWidgets.QHBoxLayout()
         row_layout.setContentsMargins(0, 0, 0, 0)
-        row.setLayout(row_layout)
-        self._add_widget(row)
+        row_widget.setLayout(row_layout)
+        self._add_widget(row_widget)
 
         if prefix:
-            widget = QtWidgets.QLabel(prefix)
-            row_layout.addWidget(widget)
+            prefix_widget = QtWidgets.QLabel(prefix)
+            row_layout.addWidget(prefix_widget)
 
         if dtype is int:
-            widget = QtWidgets.QSpinBox()
-            widget.setValue(option.value)
-            widget.setMinimum(minimum or -2147483648)
-            widget.setMaximum(maximum or 2147483647)
-            widget.setSingleStep(step or 1)
+            spinbox_widget = QtWidgets.QSpinBox()
+            spinbox_widget.setValue(option.value)
+            spinbox_widget.setMinimum(minimum or -2147483648)
+            spinbox_widget.setMaximum(maximum or 2147483647)
+            spinbox_widget.setSingleStep(step or 1)
         elif dtype is float:
-            widget = QtWidgets.QDoubleSpinBox()
-            widget.setValue(option.value)
-            widget.setMinimum(minimum or -Qt.qInf())
-            widget.setMaximum(maximum or Qt.qInf())
-            widget.setSingleStep(step or 0.1)
-            widget.setDecimals(decimals or 5)
+            spinbox_widget = QtWidgets.QDoubleSpinBox()
+            spinbox_widget.setValue(option.value)
+            spinbox_widget.setMinimum(minimum or -Qt.qInf())
+            spinbox_widget.setMaximum(maximum or Qt.qInf())
+            spinbox_widget.setSingleStep(step or 0.1)
+            spinbox_widget.setDecimals(decimals or 5)
         else:
             raise ValueError(f'Invalid dtype "{dtype.__name__}"')
 
-        row_layout.addWidget(widget, 1)
+        row_layout.addWidget(spinbox_widget, 1)
 
         if option:
-            option.connect(widget.setValue)
-            widget.valueChanged.connect(option.change)
+            option.connect(spinbox_widget.setValue)
+            spinbox_widget.valueChanged.connect(option.change)
 
         if postfix:
-            widget = QtWidgets.QLabel(postfix)
-            row_layout.addWidget(widget)
+            postfix_widget = QtWidgets.QLabel(postfix)
+            row_layout.addWidget(postfix_widget)
 
     def add_tabs(self, content=[], option=None):
-        widget = TabsWidget(self.context)
-        self._add_widget(widget)
+        tabs_widget = TabsWidget(self.context)
+        self._add_widget(tabs_widget)
 
         for label, widget_type in content:
-            widget.add_tab(label, widget_type)
+            tabs_widget.add_tab(label, widget_type)
 
         if option:
-            option.connect(widget.setCurrentIndex)
-            widget.currentChanged.connect(option.change)
+            option.connect(tabs_widget.setCurrentIndex)
+            tabs_widget.currentChanged.connect(option.change)
 
     def add_stack(self, items, option=None):
-        widget = StackWidget(self.context, items, option)
-        self._add_widget(widget)
+        stack_widget = StackWidget(self.context, items, option)
+        self._add_widget(stack_widget)
 
     def add_pages(self, items, option=None):
-        widget = PagesWidget(self.context, items, option)
-        self._add_widget(widget)
+        pages_widget = PagesWidget(self.context, items, option)
+        self._add_widget(pages_widget)
 
     def add_group(self, label, content):
-        widget = QtWidgets.QGroupBox(label)
-        self._add_widget(widget)
+        group_widget = QtWidgets.QGroupBox(label)
+        self._add_widget(group_widget)
 
-        layout = QtWidgets.QVBoxLayout()
-        widget.setLayout(layout)
+        group_layout = QtWidgets.QVBoxLayout()
+        group_widget.setLayout(group_layout)
 
         content_widget = content()
         content_widget._build(self.context)
 
-        layout.addWidget(content_widget)
+        group_layout.addWidget(content_widget)
 
     def add_combobox(self, label, items, option):
         if label:
-            widget = QtWidgets.QLabel(label)
-            self._add_widget(widget)
+            label_widget = QtWidgets.QLabel(label)
+            self._add_widget(label_widget)
 
-        widget = QtWidgets.QComboBox()
-        self._add_widget(widget)
+        combobox_widget = QtWidgets.QComboBox()
+        self._add_widget(combobox_widget)
 
         for item in items:
-            widget.addItem(str(item))
+            combobox_widget.addItem(str(item))
 
         if option:
-            option.connect(widget.setCurrentIndex)
-            widget.currentIndexChanged.connect(option.change)
+            option.connect(combobox_widget.setCurrentIndex)
+            combobox_widget.currentIndexChanged.connect(option.change)
 
     def add_space(self):
-        widget = QtWidgets.QSpacerItem(16, 16)
-        self._ground.addItem(widget)
+        spacer_item = QtWidgets.QSpacerItem(16, 16)
+        self._ground.addItem(spacer_item)
 
     def add_stretch(self):
         self._ground.addStretch(1)
