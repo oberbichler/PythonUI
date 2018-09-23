@@ -301,8 +301,8 @@ class PagesWidget(QtWidgets.QWidget):
         combobox.currentIndexChanged.connect(self._select_index)
 
         if option:
-            combobox.currentIndexChanged.connect(option)
-            option.connect(self.select_index)
+            combobox.currentIndexChanged.connect(option.change)
+            option.connect(self._select_index)
 
         self._select_index(0)
 
