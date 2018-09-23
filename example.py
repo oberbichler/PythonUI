@@ -56,6 +56,15 @@ class Window(ui.ApplicationWindow):
                 ('Numbers', NumberSelector),
                 ('Letters and numbers', LetterAndNumberSelector),
             ],
+            option=self.tab_index,
+        )
+
+        builder.add_stack(
+            items=[
+                NumberSelector,
+                LetterAndNumberSelector,
+            ],
+            option=self.tab_index,
         )
 
         builder.add_button(
