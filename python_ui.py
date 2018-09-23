@@ -233,6 +233,28 @@ class WidgetBuilder(object):
     def add_stretch(self):
         self._ground.addStretch(1)
 
+    def add_radiobuttons(self, items, option):
+        button_group = QtWidgets.QButtonGroup(self._ground.parent())
+
+        for i, item in enumerate(items):
+            radio_button = QtWidgets.QRadioButton(item)
+            button_group.addButton(radio_button, i)
+            self._ground.addWidget(radio_button)
+
+        def toggled(button, checked):
+            if not checked:
+                return
+            button_id = button_group.id(button)
+            option.change(button_id)
+
+        def toggle(button_id):
+            button = button_group.button(button_id)
+            button.toggle()
+
+        if option:
+            button_group.buttonToggled.connect(toggled)
+            option.connect(toggle)
+
 
 class Widget(QtWidgets.QWidget):
     def __init__(self):
@@ -279,8 +301,8 @@ class PagesWidget(QtWidgets.QWidget):
         combobox.currentIndexChanged.connect(self._select_index)
 
         if option:
-            combobox.currentIndexChanged.connect(option)
-            option.connect(self.select_index)
+            combobox.currentIndexChanged.connect(option.change)
+            option.connect(self._select_index)
 
         self._select_index(0)
 
