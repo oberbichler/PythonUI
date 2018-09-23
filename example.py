@@ -73,6 +73,14 @@ class Window(ui.ApplicationWindow):
             action=lambda: self.show_errordialog('That was wrong!'),
         )
 
+        builder.add_radiobuttons(
+            items=[
+                'Option 1',
+                'Option 2',
+            ],
+            option=self.tab_index,
+        )
+
         builder.add_stretch()
 
         builder.add(Dialog)
