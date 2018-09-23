@@ -66,15 +66,15 @@ class WidgetBuilder(object):
         widget = widget_type()
         builder = WidgetBuilder(self._ground, self.context)
         widget.build(builder)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
     def add_label(self, label):
         widget = QtWidgets.QLabel(label)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
     def add_button(self, label, action):
         widget = QtWidgets.QPushButton(label)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
         if len(inspect.signature(action).parameters) == 0:
             widget.clicked.connect(action)
@@ -84,7 +84,7 @@ class WidgetBuilder(object):
     def add_checkbox(self, label, option):
         widget = QtWidgets.QCheckBox(label)
         widget.setChecked(option.value)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
         option.connect(widget.setChecked)
         widget.clicked.connect(option.change)
@@ -98,7 +98,7 @@ class WidgetBuilder(object):
         row_layout = QtWidgets.QHBoxLayout()
         row_layout.setContentsMargins(0, 0, 0, 0)
         row.setLayout(row_layout)
-        self._ground.addWidget(row)
+        self._add_widget(row)
 
         if prefix:
             widget = QtWidgets.QLabel(prefix)
@@ -128,7 +128,7 @@ class WidgetBuilder(object):
         row_layout = QtWidgets.QHBoxLayout()
         row_layout.setContentsMargins(0, 0, 0, 0)
         row.setLayout(row_layout)
-        self._ground.addWidget(row)
+        self._add_widget(row)
 
         if prefix:
             widget = QtWidgets.QLabel(prefix)
@@ -162,7 +162,7 @@ class WidgetBuilder(object):
 
     def add_tabs(self, content=[], option=None):
         widget = TabsWidget(self.context)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
         for label, widget_type in content:
             widget.add_tab(label, widget_type)
@@ -173,15 +173,15 @@ class WidgetBuilder(object):
 
     def add_stack(self, items, option=None):
         widget = StackWidget(self.context, items, option)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
     def add_pages(self, items, option=None):
         widget = PagesWidget(self.context, items, option)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
     def add_group(self, label, content):
         widget = QtWidgets.QGroupBox(label)
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
         layout = QtWidgets.QVBoxLayout()
         widget.setLayout(layout)
@@ -197,7 +197,7 @@ class WidgetBuilder(object):
             self._add_widget(widget)
 
         widget = QtWidgets.QComboBox()
-        self._ground.addWidget(widget)
+        self._add_widget(widget)
 
         for item in items:
             widget.addItem(str(item))
@@ -219,7 +219,7 @@ class WidgetBuilder(object):
         for i, item in enumerate(items):
             radio_button = QtWidgets.QRadioButton(item)
             button_group.addButton(radio_button, i)
-            self._ground.addWidget(radio_button)
+            self._add_widget(radio_button)
 
         def toggled(button, checked):
             if not checked:
