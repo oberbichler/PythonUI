@@ -187,6 +187,12 @@ class WidgetBuilder(object):
 
         return widget
 
+    def add_stack(self, items, option=None):
+        widget = StackWidget(self.context, items, option)
+        self._ground.addWidget(widget)
+
+        return widget
+
     def add_pages(self, items, option=None):
         widget = PagesWidget(self.context, items, option)
         self._ground.addWidget(widget)
@@ -272,6 +278,49 @@ class Widget(QtWidgets.QWidget):
 
     def build(self, builder):
         pass
+
+
+class StackWidget(QtWidgets.QWidget):
+    def __init__(self, context, items, option):
+        super(StackWidget, self).__init__()
+
+        layout = QtWidgets.QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        self.setLayout(layout)
+
+        stack = QtWidgets.QStackedWidget()
+        layout.addWidget(stack)
+        self._stack = stack
+
+        for widget_type in items:
+            widget = widget_type()
+
+            builder = WidgetBuilder(widget._ground, context)
+            widget.build(builder)
+
+            if stack.count() != 0:
+                widget.setSizePolicy(QtWidgets.QSizePolicy.Ignored,
+                                     QtWidgets.QSizePolicy.Ignored)
+
+            stack.addWidget(widget)
+
+        if option:
+            option.connect(self._select_index)
+
+        self._select_index(0)
+
+    def _select_index(self, index):
+        if self._stack.currentWidget():
+            self._stack.currentWidget().setSizePolicy(
+                QtWidgets.QSizePolicy.Ignored,
+                QtWidgets.QSizePolicy.Ignored)
+
+        self._stack.setCurrentIndex(index)
+
+        if self._stack.currentWidget():
+            self._stack.currentWidget().setSizePolicy(
+                QtWidgets.QSizePolicy.Preferred,
+                QtWidgets.QSizePolicy.Preferred)
 
 
 class PagesWidget(QtWidgets.QWidget):
