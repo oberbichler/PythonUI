@@ -62,21 +62,15 @@ class WidgetBuilder(object):
     def _add_widget(self, widget):
         self._ground.addWidget(widget)
 
-        return widget
-
     def add(self, widget_type):
         widget = widget_type()
         builder = WidgetBuilder(self._ground, self.context)
         widget.build(builder)
         self._ground.addWidget(widget)
 
-        return widget
-
     def add_label(self, label):
         widget = QtWidgets.QLabel(label)
         self._ground.addWidget(widget)
-
-        return widget
 
     def add_button(self, label, action):
         widget = QtWidgets.QPushButton(label)
@@ -87,8 +81,6 @@ class WidgetBuilder(object):
         else:
             widget.clicked.connect(lambda: action(self.context))
 
-        return widget
-
     def add_checkbox(self, label, option):
         widget = QtWidgets.QCheckBox(label)
         widget.setChecked(option.value)
@@ -96,8 +88,6 @@ class WidgetBuilder(object):
 
         option.connect(widget.setChecked)
         widget.clicked.connect(option.change)
-
-        return widget
 
     def add_textbox(self, label, option, prefix=None, postfix=None):
         if label:
@@ -126,8 +116,6 @@ class WidgetBuilder(object):
         if postfix:
             widget = QtWidgets.QLabel(postfix)
             row_layout.addWidget(widget)
-
-        return widget
 
     def add_spinbox(self, label, option, prefix=None, postfix=None,
                     dtype=float, minimum=None, maximum=None, step=None,
@@ -172,8 +160,6 @@ class WidgetBuilder(object):
             widget = QtWidgets.QLabel(postfix)
             row_layout.addWidget(widget)
 
-        return widget
-
     def add_tabs(self, content=[], option=None):
         widget = TabsWidget(self.context)
         self._ground.addWidget(widget)
@@ -185,19 +171,13 @@ class WidgetBuilder(object):
             option.connect(widget.setCurrentIndex)
             widget.currentChanged.connect(option.change)
 
-        return widget
-
     def add_stack(self, items, option=None):
         widget = StackWidget(self.context, items, option)
         self._ground.addWidget(widget)
 
-        return widget
-
     def add_pages(self, items, option=None):
         widget = PagesWidget(self.context, items, option)
         self._ground.addWidget(widget)
-
-        return widget
 
     def add_group(self, label, content):
         widget = QtWidgets.QGroupBox(label)
@@ -210,8 +190,6 @@ class WidgetBuilder(object):
         content_widget._build(self.context)
 
         layout.addWidget(content_widget)
-
-        return widget
 
     def add_combobox(self, label, items, option):
         if label:
@@ -228,13 +206,9 @@ class WidgetBuilder(object):
             option.connect(widget.setCurrentIndex)
             widget.currentIndexChanged.connect(option.change)
 
-        return widget
-
     def add_space(self):
         widget = QtWidgets.QSpacerItem(16, 16)
         self._ground.addItem(widget)
-
-        return widget
 
     def add_stretch(self):
         self._ground.addStretch(1)
@@ -258,6 +232,7 @@ class WidgetBuilder(object):
             button.toggle()
 
         if option:
+            toggle(option.value)
             button_group.buttonToggled.connect(toggled)
             option.connect(toggle)
 
