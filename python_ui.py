@@ -150,6 +150,7 @@ class WidgetBuilder(object):
         else:
             raise ValueError(f'Invalid dtype "{dtype.__name__}"')
 
+        spinbox_widget.setKeyboardTracking(False)
         row_layout.addWidget(spinbox_widget, 1)
 
         if option:
