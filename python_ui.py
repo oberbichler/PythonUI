@@ -160,11 +160,11 @@ class WidgetBuilder(object):
             postfix_widget = QtWidgets.QLabel(postfix)
             row_layout.addWidget(postfix_widget)
 
-    def add_tabs(self, content=[], option=None):
+    def add_tabs(self, items, option=None):
         tabs_widget = TabsWidget(self.context)
         self._add_widget(tabs_widget)
 
-        for label, widget_type in content:
+        for label, widget_type in items:
             tabs_widget.add_tab(label, widget_type)
 
         if option:
@@ -497,7 +497,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         dialog.show()
 
-    def open_file_dialog(self, title=None, filters=None):
+    def show_open_file_dialog(self, title=None, filters=None):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
         result = QtWidgets.QFileDialog.getOpenFileName(self, title,
@@ -505,7 +505,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         return result
 
-    def save_file_dialog(self, title=None, filters=None):
+    def show_save_file_dialog(self, title=None, filters=None):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
         result = QtWidgets.QFileDialog.getSaveFileName(self, title,
@@ -513,7 +513,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         return result
 
-    def error_dialog(self, message):
+    def show_error_dialog(self, message):
         QtWidgets.QMessageBox.critical(self, 'Error', message)
 
     def showEvent(self, event):
