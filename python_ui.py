@@ -68,6 +68,13 @@ class WidgetBuilder(object):
         widget.build(builder)
         self._add_widget(widget)
 
+    def add_space(self):
+        spacer_item = QtWidgets.QSpacerItem(16, 16)
+        self._ground.addItem(spacer_item)
+
+    def add_stretch(self):
+        self._ground.addStretch(1)
+
     def add_label(self, label):
         label_widget = QtWidgets.QLabel(label)
         self._add_widget(label_widget)
@@ -80,14 +87,6 @@ class WidgetBuilder(object):
             button_widget.clicked.connect(action)
         else:
             button_widget.clicked.connect(lambda: action(self.context))
-
-    def add_checkbox(self, label, option):
-        checkbox_widget = QtWidgets.QCheckBox(label)
-        checkbox_widget.setChecked(option.value)
-        self._add_widget(checkbox_widget)
-
-        option.connect(checkbox_widget.setChecked)
-        checkbox_widget.clicked.connect(option.change)
 
     def add_textbox(self, label, option, prefix=None, postfix=None):
         if label:
@@ -161,38 +160,15 @@ class WidgetBuilder(object):
             postfix_widget = QtWidgets.QLabel(postfix)
             row_layout.addWidget(postfix_widget)
 
-    def add_tabs(self, items, option=None):
-        tabs_widget = TabsWidget(self.context)
-        self._add_widget(tabs_widget)
+    def add_checkbox(self, label, option):
+        checkbox_widget = QtWidgets.QCheckBox(label)
+        checkbox_widget.setChecked(option.value)
+        self._add_widget(checkbox_widget)
 
-        for label, widget_type in items:
-            tabs_widget.add_tab(label, widget_type)
+        option.connect(checkbox_widget.setChecked)
+        checkbox_widget.clicked.connect(option.change)
 
-        if option:
-            option.connect(tabs_widget.setCurrentIndex)
-            tabs_widget.currentChanged.connect(option.change)
-
-    def add_stack(self, items, option=None):
-        stack_widget = StackWidget(self.context, items, option)
-        self._add_widget(stack_widget)
-
-    def add_pages(self, items, option=None):
-        pages_widget = PagesWidget(self.context, items, option)
-        self._add_widget(pages_widget)
-
-    def add_group(self, label, content):
-        group_widget = QtWidgets.QGroupBox(label)
-        self._add_widget(group_widget)
-
-        group_layout = QtWidgets.QVBoxLayout()
-        group_widget.setLayout(group_layout)
-
-        content_widget = content()
-        content_widget._build(self.context)
-
-        group_layout.addWidget(content_widget)
-
-    def add_combobox(self, label, items, option):
+    def add_combobox(self, items, option, label=None):
         if label:
             label_widget = QtWidgets.QLabel(label)
             self._add_widget(label_widget)
@@ -206,13 +182,6 @@ class WidgetBuilder(object):
         if option:
             option.connect(combobox_widget.setCurrentIndex)
             combobox_widget.currentIndexChanged.connect(option.change)
-
-    def add_space(self):
-        spacer_item = QtWidgets.QSpacerItem(16, 16)
-        self._ground.addItem(spacer_item)
-
-    def add_stretch(self):
-        self._ground.addStretch(1)
 
     def add_radiobuttons(self, items, option):
         button_group = QtWidgets.QButtonGroup(self._ground.parent())
@@ -236,6 +205,37 @@ class WidgetBuilder(object):
             toggle(option.value)
             button_group.buttonToggled.connect(toggled)
             option.connect(toggle)
+
+    def add_group(self, label, content):
+        group_widget = QtWidgets.QGroupBox(label)
+        self._add_widget(group_widget)
+
+        group_layout = QtWidgets.QVBoxLayout()
+        group_widget.setLayout(group_layout)
+
+        content_widget = content()
+        content_widget._build(self.context)
+
+        group_layout.addWidget(content_widget)
+
+    def add_tabs(self, items, option=None):
+        tabs_widget = TabsWidget(self.context)
+        self._add_widget(tabs_widget)
+
+        for label, widget_type in items:
+            tabs_widget.add_tab(label, widget_type)
+
+        if option:
+            option.connect(tabs_widget.setCurrentIndex)
+            tabs_widget.currentChanged.connect(option.change)
+
+    def add_stack(self, items, option=None):
+        stack_widget = StackWidget(self.context, items, option)
+        self._add_widget(stack_widget)
+
+    def add_pages(self, items, option=None):
+        pages_widget = PagesWidget(self.context, items, option)
+        self._add_widget(pages_widget)
 
 
 class Widget(QtWidgets.QWidget):
