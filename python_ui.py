@@ -483,7 +483,7 @@ class ApplicationWindow(QtWidgets.QWidget):
         if size:
             dialog.resize(*size)
         else:
-            dialog.resize(widget.size())
+            dialog.adjustSize()
 
         layout = QtWidgets.QGridLayout()
         dialog.setLayout(layout)
