@@ -469,6 +469,8 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         widget.show()
 
+        widget._started()
+
         app.exec_()
 
     def show_dialog(self, widget_type, title='', size=None, modal=True,
@@ -543,4 +545,7 @@ class ApplicationWindow(QtWidgets.QWidget):
         self.content.redraw()
 
     def _draw(self, plot):
+        pass
+
+    def _started(self):
         pass
