@@ -473,7 +473,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
     def show_dialog(self, widget_type, title='', size=None, modal=True,
                     action=None):
-        dialog = QtWidgets.QDialog(self, QtCore.Qt.WindowCloseButtonHint)
+        dialog = QtWidgets.QDialog(self, QtCore.Qt.Tool)
         dialog.setWindowTitle(title)
         dialog.setModal(modal)
 
