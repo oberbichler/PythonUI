@@ -27,7 +27,7 @@ class Window(ui.ApplicationWindow):
         )
 
         builder.add_tabs(
-            content=[
+            items=[
                 ('SettingsA', SettingsA),
                 ('SettingsB', SettingsB),
             ],

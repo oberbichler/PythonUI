@@ -160,11 +160,11 @@ class WidgetBuilder(object):
             postfix_widget = QtWidgets.QLabel(postfix)
             row_layout.addWidget(postfix_widget)
 
-    def add_tabs(self, content=[], option=None):
+    def add_tabs(self, items, option=None):
         tabs_widget = TabsWidget(self.context)
         self._add_widget(tabs_widget)
 
-        for label, widget_type in content:
+        for label, widget_type in items:
             tabs_widget.add_tab(label, widget_type)
 
         if option:
