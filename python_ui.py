@@ -497,7 +497,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         dialog.show()
 
-    def open_file_dialog(self, title=None, filters=None):
+    def show_open_file_dialog(self, title=None, filters=None):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
         result = QtWidgets.QFileDialog.getOpenFileName(self, title,
@@ -505,7 +505,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         return result
 
-    def save_file_dialog(self, title=None, filters=None):
+    def show_save_file_dialog(self, title=None, filters=None):
         filter = ';;'.join(filters) if isinstance(filters, list) else filters
 
         result = QtWidgets.QFileDialog.getSaveFileName(self, title,
@@ -513,7 +513,7 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         return result
 
-    def error_dialog(self, message):
+    def show_error_dialog(self, message):
         QtWidgets.QMessageBox.critical(self, 'Error', message)
 
     def showEvent(self, event):

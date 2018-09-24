@@ -79,7 +79,7 @@ class Window(ui.ApplicationWindow):
 
         builder.add_button(
             label='Make some mistake',
-            action=lambda: self.error_dialog('That was wrong!'),
+            action=lambda: self.show_error_dialog('That was wrong!'),
         )
 
         builder.add_radiobuttons(
@@ -102,8 +102,8 @@ class Window(ui.ApplicationWindow):
         print(message)
 
     def on_open_clicked(self, args):
-        result = self.open_file_dialog(title='Open Python-File',
-                                          filters='Python-Script (*.py)')
+        result = self.show_open_file_dialog(title='Open Python-File',
+                                            filters='Python-Script (*.py)')
 
         if result is None:
             return
@@ -113,8 +113,8 @@ class Window(ui.ApplicationWindow):
         print(f'Open "{filename}" as "{filetype}"')
 
     def on_save_clicked(self):
-        result = self.save_file_dialog(title='Save Python-File',
-                                          filters='Python-Script (*.py)')
+        result = self.show_save_file_dialog(title='Save Python-File',
+                                            filters='Python-Script (*.py)')
 
         if result is None:
             return
