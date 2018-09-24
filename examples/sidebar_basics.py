@@ -26,14 +26,14 @@ class Window(ui.ApplicationWindow):
 
         self.combobox_value = ui.Option(
             value=0,
-            action=lambda value: print(f'You choosed "{value}" with' +
-                                       ' the Combobox')
+            action=lambda value: print(f'You have chosen item "{value}" from' +
+                                       ' the Combobox'),
         )
 
         self.radiobuttons_value = ui.Option(
             value=0,
-            action=lambda value: print(f'You choosed "{value}" with' +
-                                       ' the Radiobuttons')
+            action=lambda value: print(f'You have chosen item "{value}" from' +
+                                       ' the Radiobuttons'),
         )
 
     def _build_sidebar(self, builder):
@@ -70,17 +70,18 @@ class Window(ui.ApplicationWindow):
         )
 
         builder.add_combobox(
+            label='This is a combobox...',
             items=[
-                'Item 1',
-                'Item 2',
+                '...with item 0...',
+                '...and item 1',
             ],
             option=builder.context.combobox_value,
         )
 
         builder.add_radiobuttons(
             items=[
-                'Item 1',
-                'Item 2',
+                'Radiobuttons with item 0...',
+                '...and item 1',
             ],
             option=builder.context.radiobuttons_value,
         )
