@@ -102,7 +102,8 @@ class WidgetBuilder(object):
         else:
             button_widget.clicked.connect(lambda: action(self.context))
 
-    def add_textbox(self, label, option, prefix=None, postfix=None):
+    def add_textbox(self, label, option, prefix=None, postfix=None,
+                    validator=None):
         if label:
             label_widget = QtWidgets.QLabel(label)
             self._add_widget(label_widget)
@@ -118,6 +119,8 @@ class WidgetBuilder(object):
             row_layout.addWidget(prefix_widget)
 
         textbox_widget = QtWidgets.QLineEdit()
+        if validator:
+            textbox_widget.setValidator(validator)
         textbox_widget.setText(option.value)
 
         row_layout.addWidget(textbox_widget, 1)
