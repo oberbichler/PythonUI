@@ -5,6 +5,20 @@ import inspect
 import sys
 
 
+class UpperValidator(QtGui.QValidator):
+    def __init__(self, parent=None):
+        super(UpperValidator, self).__init__(parent)
+ 
+    def validate(self, string, pos):
+        if string.isupper():
+            return QtGui.QValidator.Acceptable, string, pos
+        else:
+            return QtGui.QValidator.Intermediate, string, pos
+    
+    def fixup(self, string):
+        return string.upper()
+
+
 class Option(QtCore.QObject):
     _changed = QtCore.pyqtSignal(object)
 
