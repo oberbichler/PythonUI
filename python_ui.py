@@ -120,7 +120,7 @@ class WidgetBuilder(object):
 
         textbox_widget = QtWidgets.QLineEdit()
         if validator:
-            textbox_widget.setValidator(validator)
+            textbox_widget.setValidator(validator(textbox_widget))
         textbox_widget.setText(option.value)
 
         row_layout.addWidget(textbox_widget, 1)
