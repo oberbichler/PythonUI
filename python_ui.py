@@ -459,12 +459,12 @@ class ApplicationWindow(QtWidgets.QWidget):
         self.layout().addWidget(hsplitter)
 
     @classmethod
-    def run(cls):
+    def run(cls, *args, **kwargs):
         app = QtWidgets.QApplication([])
 
         app.setStyle(QtWidgets.QStyleFactory.create('Fusion'))
 
-        widget = cls()
+        widget = cls(*args, **kwargs)
         widget._build(widget)
 
         widget.show()
