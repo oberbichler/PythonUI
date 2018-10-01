@@ -5,6 +5,25 @@ import inspect
 import sys
 
 
+class _GenericValidator(QtGui.QValidator):
+    def __init__(self, parent, validate):
+        super(_GenericValidator, self).__init__(parent)
+        self._validate = validate
+
+    def validate(self, string, pos):
+        validated = self._validate(string)
+
+        if validated is None:
+            return QtGui.QValidator.Invalid, string, pos
+        elif validated == string:
+            return QtGui.QValidator.Acceptable, string, pos
+        else:
+            return QtGui.QValidator.Intermediate, string, pos
+
+    def fixup(self, string):
+        return self._validate(string)
+
+
 class Option(QtCore.QObject):
     _changed = QtCore.pyqtSignal(object)
 
@@ -88,7 +107,8 @@ class WidgetBuilder(object):
         else:
             button_widget.clicked.connect(lambda: action(self.context))
 
-    def add_textbox(self, label, option, prefix=None, postfix=None):
+    def add_textbox(self, label, option, prefix=None, postfix=None,
+                    validate=None):
         if label:
             label_widget = QtWidgets.QLabel(label)
             self._add_widget(label_widget)
@@ -104,13 +124,17 @@ class WidgetBuilder(object):
             row_layout.addWidget(prefix_widget)
 
         textbox_widget = QtWidgets.QLineEdit()
+        if validate:
+            validator = _GenericValidator(textbox_widget, validate)
+            textbox_widget.setValidator(validator)
         textbox_widget.setText(option.value)
 
         row_layout.addWidget(textbox_widget, 1)
 
         if option:
             option.connect(textbox_widget.setText)
-            textbox_widget.textChanged.connect(option.change)
+            textbox_widget.editingFinished.connect(
+                lambda: option.change(textbox_widget.text()))
 
         if postfix:
             postfix_widget = QtWidgets.QLabel(postfix)
