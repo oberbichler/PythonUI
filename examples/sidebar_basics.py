@@ -53,7 +53,6 @@ class Window(ui.ApplicationWindow):
             prefix='...with a prefix...',
             postfix='...and a postfix',
             option=builder.context.textbox_value,
-            validator=ui.UpperValidator,
         )
 
         builder.add_space()  # just add some space between two controls
