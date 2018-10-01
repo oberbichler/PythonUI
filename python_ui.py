@@ -5,18 +5,23 @@ import inspect
 import sys
 
 
-class UpperValidator(QtGui.QValidator):
-    def __init__(self, parent=None):
-        super(UpperValidator, self).__init__(parent)
+class _GenericValidator(QtGui.QValidator):
+    def __init__(self, parent, validate):
+        super(_GenericValidator, self).__init__(parent)
+        self._validate = validate
 
     def validate(self, string, pos):
-        if string.isupper():
+        validated = self._validate(string)
+
+        if validated is None:
+            return QtGui.QValidator.Invalid, string, pos
+        elif validated == string:
             return QtGui.QValidator.Acceptable, string, pos
         else:
             return QtGui.QValidator.Intermediate, string, pos
 
     def fixup(self, string):
-        return string.upper()
+        return self._validate(string)
 
 
 class Option(QtCore.QObject):
@@ -103,7 +108,7 @@ class WidgetBuilder(object):
             button_widget.clicked.connect(lambda: action(self.context))
 
     def add_textbox(self, label, option, prefix=None, postfix=None,
-                    validator=None):
+                    validate=None):
         if label:
             label_widget = QtWidgets.QLabel(label)
             self._add_widget(label_widget)
@@ -119,8 +124,9 @@ class WidgetBuilder(object):
             row_layout.addWidget(prefix_widget)
 
         textbox_widget = QtWidgets.QLineEdit()
-        if validator:
-            textbox_widget.setValidator(validator(textbox_widget))
+        if validate:
+            validator = _GenericValidator(textbox_widget, validate)
+            textbox_widget.setValidator(validator)
         textbox_widget.setText(option.value)
 
         row_layout.addWidget(textbox_widget, 1)
