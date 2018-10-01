@@ -133,7 +133,8 @@ class WidgetBuilder(object):
 
         if option:
             option.connect(textbox_widget.setText)
-            textbox_widget.textChanged.connect(option.change)
+            textbox_widget.editingFinished.connect(
+                lambda: option.change(textbox_widget.text()))
 
         if postfix:
             postfix_widget = QtWidgets.QLabel(postfix)
