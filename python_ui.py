@@ -1,3 +1,6 @@
+# PythonUI by Thomas Oberbichler
+# https://github.com/oberbichler/PythonUI
+
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
