@@ -308,6 +308,8 @@ class WidgetBuilder(object):
                     value_str = str(value)
                     table_widget.setItem(i, j,
                                          QtWidgets.QTableWidgetItem(value_str))
+            else:
+                raise Exception('Arrays with dimension > 2 not supported')
 
             table_widget.blockSignals(False)
 
@@ -320,6 +322,8 @@ class WidgetBuilder(object):
                 option.value[row] = value
             elif len(shape) == 2:
                 option.value[row, col] = value
+            else:
+                raise Exception('Arrays with dimension > 2 not supported')
 
             option.emit()
 
