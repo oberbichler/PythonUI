@@ -5,6 +5,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 import inspect
+import numpy as np
 import sys
 
 
@@ -267,6 +268,46 @@ class WidgetBuilder(object):
     def add_pages(self, items, option=None):
         pages_widget = PagesWidget(self.context, items, option)
         self._add_widget(pages_widget)
+
+    def add_array(self, option, label=None, readonly=False):
+        if label:
+            label_widget = QtWidgets.QLabel(label)
+            self._add_widget(label_widget)
+
+        table_widget = QtWidgets.QTableWidget()
+        if readonly:
+            table_widget.setEditTriggers(
+                QtWidgets.QAbstractItemView.NoEditTriggers)
+
+        def update_table(array):
+            table_widget.blockSignals(True)
+
+            shape = array.shape
+
+            if len(shape) == 2:
+                rows, cols = shape
+                table_widget.setRowCount(rows)
+                table_widget.setColumnCount(cols)
+
+                table_widget.setVerticalHeaderLabels(map(str, range(rows)))
+                table_widget.setHorizontalHeaderLabels(map(str, range(cols)))
+
+                for (i, j), value in np.ndenumerate(array):
+                    table_widget.setItem(i, j,
+                                         QtWidgets.QTableWidgetItem(str(value)))
+
+            table_widget.blockSignals(False)
+
+        def update_cell(row, col):
+            option.value[row, col] = float(table_widget.item(row, col).text())
+            option.emit()
+
+        update_table(option.value)
+
+        option.connect(update_table)
+        table_widget.cellChanged.connect(lambda i, j: update_cell(i, j))
+
+        self._add_widget(table_widget)
 
 
 class Widget(QtWidgets.QWidget):
