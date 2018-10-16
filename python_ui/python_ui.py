@@ -282,9 +282,21 @@ class WidgetBuilder(object):
         def update_table(array):
             table_widget.blockSignals(True)
 
-            shape = array.shape
+            shape = np.shape(array)
 
-            if len(shape) == 2:
+            if len(shape) == 1:
+                rows, = shape
+                table_widget.setRowCount(rows)
+                table_widget.setColumnCount(1)
+
+                table_widget.setVerticalHeaderLabels(map(str, range(rows)))
+                table_widget.setHorizontalHeaderLabels(['0'])
+
+                for (i,), value in np.ndenumerate(array):
+                    value_str = str(value)
+                    table_widget.setItem(i, 0,
+                                         QtWidgets.QTableWidgetItem(value_str))
+            elif len(shape) == 2:
                 rows, cols = shape
                 table_widget.setRowCount(rows)
                 table_widget.setColumnCount(cols)
@@ -293,13 +305,22 @@ class WidgetBuilder(object):
                 table_widget.setHorizontalHeaderLabels(map(str, range(cols)))
 
                 for (i, j), value in np.ndenumerate(array):
+                    value_str = str(value)
                     table_widget.setItem(i, j,
-                                         QtWidgets.QTableWidgetItem(str(value)))
+                                         QtWidgets.QTableWidgetItem(value_str))
 
             table_widget.blockSignals(False)
 
         def update_cell(row, col):
-            option.value[row, col] = float(table_widget.item(row, col).text())
+            shape = np.shape(option.value)
+
+            value = float(table_widget.item(row, col).text())
+
+            if len(shape) == 1:
+                option.value[row] = value
+            elif len(shape) == 2:
+                option.value[row, col] = value
+
             option.emit()
 
         update_table(option.value)
