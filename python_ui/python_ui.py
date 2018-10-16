@@ -50,7 +50,10 @@ class Option(QtCore.QObject):
     @value.setter
     def value(self, value):
         self._value = value
-        self._changed.emit(value)
+        self.emit()
+
+    def emit(self):
+        self._changed.emit(self._value)
 
 
 class Stream(QtCore.QObject):
