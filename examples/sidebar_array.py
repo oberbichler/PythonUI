@@ -9,12 +9,12 @@ class Window(ui.ApplicationWindow):
         )
 
         self.nb_rows = ui.Option(
-            value=3,
+            value=1,
             action=self.resize_array,
         )
 
         self.nb_cols = ui.Option(
-            value=3,
+            value=1,
             action=self.resize_array,
         )
 
