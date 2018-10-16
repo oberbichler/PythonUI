@@ -133,12 +133,12 @@ class WidgetBuilder(object):
         if validate:
             validator = _GenericValidator(textbox_widget, validate)
             textbox_widget.setValidator(validator)
-        textbox_widget.setText(option.value)
+        textbox_widget.setText(str(option.value))
 
         row_layout.addWidget(textbox_widget, 1)
 
         if option:
-            option.connect(textbox_widget.setText)
+            option.connect(lambda value: textbox_widget.setText(str(value)))
             textbox_widget.editingFinished.connect(
                 lambda: option.change(textbox_widget.text()))
 
