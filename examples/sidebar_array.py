@@ -19,16 +19,16 @@ class Window(ui.ApplicationWindow):
         )
 
         self.array = ui.Option(
-            value=np.eye(3),
+            value=np.eye(1),
             action=self.compute_matrix_info,
         )
 
         self.sum = ui.Option(
-            value=0,
+            value=1,
         )
 
         self.det = ui.Option(
-            value=0,
+            value=1,
         )
 
     def resize_array(self):
