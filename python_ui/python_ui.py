@@ -114,7 +114,7 @@ class WidgetBuilder(object):
             button_widget.clicked.connect(lambda: action(self.context))
 
     def add_textbox(self, label, option, prefix=None, postfix=None,
-                    validate=None):
+                    validate=None, readonly=False):
         if label:
             label_widget = QtWidgets.QLabel(label)
             self._add_widget(label_widget)
@@ -134,6 +134,7 @@ class WidgetBuilder(object):
             validator = _GenericValidator(textbox_widget, validate)
             textbox_widget.setValidator(validator)
         textbox_widget.setText(str(option.value))
+        textbox_widget.setReadOnly(readonly)
 
         row_layout.addWidget(textbox_widget, 1)
 
