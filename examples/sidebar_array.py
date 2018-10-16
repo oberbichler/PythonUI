@@ -9,26 +9,26 @@ class Window(ui.ApplicationWindow):
         )
 
         self.nb_rows = ui.Option(
-            value=3,
+            value=1,
             action=self.resize_array,
         )
 
         self.nb_cols = ui.Option(
-            value=3,
+            value=1,
             action=self.resize_array,
         )
 
         self.array = ui.Option(
-            value=np.eye(3),
+            value=np.eye(1),
             action=self.compute_matrix_info,
         )
 
         self.sum = ui.Option(
-            value=0,
+            value=1,
         )
 
         self.det = ui.Option(
-            value=0,
+            value=1,
         )
 
     def resize_array(self):
