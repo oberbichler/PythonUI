@@ -448,6 +448,13 @@ class PlotCanvas(QtWidgets.QWidget):
     def redraw(self):
         plot = self._plot
 
+        figure = plot.get_figure()
+
+        for ax in figure.axes[1:]:
+            figure.delaxes(ax)
+
+        figure.subplots_adjust()
+
         plot.clear()
 
         self._redraw.emit(plot)
