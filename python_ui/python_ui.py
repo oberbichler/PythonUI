@@ -57,27 +57,151 @@ class Option(QtCore.QObject):
         self._changed.emit(self._value)
 
 
-class Stream(QtCore.QObject):
-    text_written = QtCore.pyqtSignal(str)
+class Fore(object):
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    RESET = '\033[39m'
 
-    def write(self, text):
-        self.text_written.emit(str(text))
+
+class Back(object):
+    BLACK = '\033[40m'
+    RED = '\033[41m'
+    GREEN = '\033[42m'
+    YELLOW = '\033[43m'
+    BLUE = '\033[44m'
+    MAGENTA = '\033[45m'
+    CYAN = '\033[46m'
+    WHITE = '\033[47m'
+    RESET = '\033[49m'
+
+
+class Style(object):
+    DIM = '\033[2m'
+    NORMAL = '\033[22m'
+    BRIGHT = '\033[1m'
+    RESET_ALL = '\033[0m'
+
+
+ConsoleStyles = Fore, Back, Style
 
 
 class Console(QtWidgets.QTextEdit):
+    BACKGROUND = QtGui.QColor('#1b1b1b')
+    BLACK = QtGui.QColor('#303030')
+    RED = QtGui.QColor('#e1321a')
+    GREEN = QtGui.QColor('#6ab017')
+    YELLOW = QtGui.QColor('#ffc005')
+    BLUE = QtGui.QColor('#004f9e')
+    MAGENTA = QtGui.QColor('#ec0048')
+    CYAN = QtGui.QColor('#2aa7e7')
+    WHITE = QtGui.QColor('#f2f2f2')
+
     def __init__(self):
         super(Console, self).__init__()
         font = QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
+
+        font = QtGui.QFont('Consolas')
+        font.setStyleHint(QtGui.QFont.TypeWriter)
         self.setFont(font)
         self.setReadOnly(True)
         self.setFrameStyle(QtWidgets.QFrame.NoFrame)
+        self._default_format = QtGui.QTextCharFormat()
+        self._text_format = QtGui.QTextCharFormat()
+        self.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
+
+        p = self.palette()
+        p.setColor(QtGui.QPalette.Base, Console.BACKGROUND)
+        p.setColor(QtGui.QPalette.Text, Console.WHITE)
+        self.setPalette(p)
+
+    def _foreground(self, color):
+        if color is None:
+            color = self._default_format.foreground()
+        self._text_format.setForeground(color)
+
+    def _background(self, color):
+        if color is None:
+            color = self._default_format.background()
+        self._text_format.setBackground(color)
+
+    def _apply_code(self, code):
+        if code == 0:
+            self._text_format.setFontWeight(self._text_format.fontWeight())
+            self._foreground(None)
+            self._background(None)
+        elif code == 1:
+            self._text_format.setFontWeight(QtGui.QFont.Bold)
+        elif code == 30:
+            self._foreground(Console.BLACK)
+        elif code == 31:
+            self._foreground(Console.RED)
+        elif code == 32:
+            self._foreground(Console.GREEN)
+        elif code == 33:
+            self._foreground(Console.YELLOW)
+        elif code == 34:
+            self._foreground(Console.BLUE)
+        elif code == 35:
+            self._foreground(Console.MAGENTA)
+        elif code == 36:
+            self._foreground(Console.CYAN)
+        elif code == 37:
+            self._foreground(Console.WHITE)
+        elif code == 39:
+            self._foreground(None)
+        elif code == 40:
+            self._background(Console.BLACK)
+        elif code == 41:
+            self._background(Console.RED)
+        elif code == 42:
+            self._background(Console.GREEN)
+        elif code == 43:
+            self._background(Console.YELLOW)
+        elif code == 44:
+            self._background(Console.BLUE)
+        elif code == 45:
+            self._background(Console.MAGENTA)
+        elif code == 46:
+            self._background(Console.CYAN)
+        elif code == 47:
+            self._background(Console.WHITE)
+        elif code == 49:
+            self._background(None)
 
     def write(self, text):
         cursor = self.textCursor()
         cursor.movePosition(QtGui.QTextCursor.End)
-        cursor.insertText(text)
+
+        npos = 0
+
+        while True:
+            start = text.find('\033[', npos)
+
+            if start < 0:
+                cursor.insertText(text[npos:], self._text_format)
+                break
+
+            if start != npos:
+                cursor.insertText(text[npos:start], self._text_format)
+
+            end = text.find('m', start + 2)
+
+            for code in map(int, text[start+2:end].split(';')):
+                self._apply_code(code)
+
+            npos = end + 1
+
         self.setTextCursor(cursor)
         self.ensureCursorVisible()
+
+    def flush(self):
+        pass
 
 
 class WidgetBuilder(object):
@@ -625,17 +749,10 @@ class ApplicationWindow(QtWidgets.QWidget):
 
     def showEvent(self, event):
         self._old_stdout = sys.stdout
-        sys.stdout = Stream(text_written=self.__write_log)
+        sys.stdout = self.console
 
     def hideEvent(self, event):
         sys.stdout = self._old_stdout
-
-    def __write_log(self, text):
-        cursor = self.console.textCursor()
-        cursor.movePosition(QtGui.QTextCursor.End)
-        cursor.insertText(text)
-        self.console.setTextCursor(cursor)
-        self.console.ensureCursorVisible()
 
     def _build(self, context):
         sidebar_builder = WidgetBuilder(self.sidebar._ground, context)
