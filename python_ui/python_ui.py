@@ -88,6 +88,9 @@ class Style(object):
     RESET_ALL = '\033[0m'
 
 
+ConsoleStyles = Fore, Back, Style
+
+
 class Console(QtWidgets.QTextEdit):
     BACKGROUND = QtGui.QColor('#1b1b1b')
     BLACK = QtGui.QColor('#303030')
