@@ -1,7 +1,8 @@
 # PythonUI by Thomas Oberbichler
 # https://github.com/oberbichler/PythonUI
 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg,
+                                                NavigationToolbar2QT)
 from matplotlib.figure import Figure
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 import inspect
@@ -631,6 +632,9 @@ class PlotCanvas(QtWidgets.QWidget):
         canvas.setContentsMargins(0, 0, 0, 0)
         layout.addWidget(canvas, 1, 1, 1, 1)
         self._canvas = canvas
+
+        toolbar = NavigationToolbar2QT(canvas, self)
+        layout.addWidget(toolbar, 2, 1, 1, 1)
 
         plot = figure.add_subplot(111)
         figure.tight_layout()
