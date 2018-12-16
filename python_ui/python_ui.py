@@ -4,6 +4,7 @@
 from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg,
                                                 NavigationToolbar2QT)
 from matplotlib.figure import Figure
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 import inspect
 import numpy as np
@@ -637,7 +638,6 @@ class PlotCanvas(QtWidgets.QWidget):
         layout.addWidget(toolbar, 2, 1, 1, 1)
 
         plot = figure.add_subplot(111)
-        figure.tight_layout()
         plot.set_aspect('equal')
         self._plot = plot
 
