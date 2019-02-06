@@ -460,6 +460,24 @@ class WidgetBuilder(object):
 
         self._add_widget(table_widget)
 
+    '''
+    contributed by Mahmoud Zidan
+    '''
+    def add_slider(self, label, option, minimum=None, maximum=None, ticks=None):
+        if label:
+            label_widget = QtWidgets.QLabel(label)
+            self._add_widget(label_widget)
+
+        slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        slider.setMinimum(minimum or 1)
+        slider.setMaximum(maximum or 10)
+        if ticks:
+            slider.setTickInterval(ticks)
+        slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        slider.setValue(option.value)
+        slider.valueChanged.connect(option.change)
+        self._add_widget(slider)
+
 
 class Widget(QtWidgets.QWidget):
     def __init__(self):

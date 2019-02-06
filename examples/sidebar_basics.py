@@ -36,6 +36,11 @@ class Window(ui.ApplicationWindow):
                                        ' the Radiobuttons'),
         )
 
+        self.slider_value = ui.Option(
+            value=0,
+            action=lambda value: print(f'You set slider to "{value}"'),
+        )
+
     def _build_sidebar(self, builder):
         # Add some controls to the sidebar
 
@@ -84,6 +89,14 @@ class Window(ui.ApplicationWindow):
                 '...and item 1',
             ],
             option=builder.context.radiobuttons_value,
+        )
+
+        builder.add_slider(
+            label='This is a slider',
+            option=builder.context.slider_value,
+            minimum=-5.0,
+            maximum=10.0,
+            ticks=5,
         )
 
         builder.add_stretch()
