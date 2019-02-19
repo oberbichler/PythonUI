@@ -14,7 +14,8 @@ class Window(ui.ApplicationWindow):
 
     def _build_sidebar(self, builder):
         builder.add_textbox(
-            label='The textbox only accepts uppercase chars',
+            label='The textbox only accepts uppercase chars (use TAB or ENTER' +
+                  ' to confirm input)',
             option=builder.context.textbox_value,
             validate=lambda value: (None if any(c.isdigit() for c in value)
                                     else value.upper()),
