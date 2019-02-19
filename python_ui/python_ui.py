@@ -93,7 +93,7 @@ class Style(object):
 ConsoleStyles = Fore, Back, Style
 
 
-class Console(QtWidgets.QTextEdit):
+class DarkStyle:
     BACKGROUND = QtGui.QColor('#1b1b1b')
     BLACK = QtGui.QColor('#303030')
     RED = QtGui.QColor('#e1321a')
@@ -104,9 +104,15 @@ class Console(QtWidgets.QTextEdit):
     CYAN = QtGui.QColor('#2aa7e7')
     WHITE = QtGui.QColor('#f2f2f2')
 
+
+class Console(QtWidgets.QTextEdit):
+
     def __init__(self):
         super(Console, self).__init__()
+        
         font = QtGui.QFontDatabase.systemFont(QtGui.QFontDatabase.FixedFont)
+        
+        self.style = DarkStyle
 
         font = QtGui.QFont('Consolas')
         font.setStyleHint(QtGui.QFont.TypeWriter)
@@ -118,8 +124,8 @@ class Console(QtWidgets.QTextEdit):
         self.setLineWrapMode(QtWidgets.QTextEdit.NoWrap)
 
         p = self.palette()
-        p.setColor(QtGui.QPalette.Base, Console.BACKGROUND)
-        p.setColor(QtGui.QPalette.Text, Console.WHITE)
+        p.setColor(QtGui.QPalette.Base, self.style.BACKGROUND)
+        p.setColor(QtGui.QPalette.Text, self.style.WHITE)
         self.setPalette(p)
 
     def _foreground(self, color):
@@ -140,39 +146,39 @@ class Console(QtWidgets.QTextEdit):
         elif code == 1:
             self._text_format.setFontWeight(QtGui.QFont.Bold)
         elif code == 30:
-            self._foreground(Console.BLACK)
+            self._foreground(self.style.BLACK)
         elif code == 31:
-            self._foreground(Console.RED)
+            self._foreground(self.style.RED)
         elif code == 32:
-            self._foreground(Console.GREEN)
+            self._foreground(self.style.GREEN)
         elif code == 33:
-            self._foreground(Console.YELLOW)
+            self._foreground(self.style.YELLOW)
         elif code == 34:
-            self._foreground(Console.BLUE)
+            self._foreground(self.style.BLUE)
         elif code == 35:
-            self._foreground(Console.MAGENTA)
+            self._foreground(self.style.MAGENTA)
         elif code == 36:
-            self._foreground(Console.CYAN)
+            self._foreground(self.style.CYAN)
         elif code == 37:
-            self._foreground(Console.WHITE)
+            self._foreground(self.style.WHITE)
         elif code == 39:
             self._foreground(None)
         elif code == 40:
-            self._background(Console.BLACK)
+            self._background(self.style.BLACK)
         elif code == 41:
-            self._background(Console.RED)
+            self._background(self.style.RED)
         elif code == 42:
-            self._background(Console.GREEN)
+            self._background(self.style.GREEN)
         elif code == 43:
-            self._background(Console.YELLOW)
+            self._background(self.style.YELLOW)
         elif code == 44:
-            self._background(Console.BLUE)
+            self._background(self.style.BLUE)
         elif code == 45:
-            self._background(Console.MAGENTA)
+            self._background(self.style.MAGENTA)
         elif code == 46:
-            self._background(Console.CYAN)
+            self._background(self.style.CYAN)
         elif code == 47:
-            self._background(Console.WHITE)
+            self._background(self.style.WHITE)
         elif code == 49:
             self._background(None)
 
@@ -473,7 +479,7 @@ class WidgetBuilder(object):
         slider.setMaximum(maximum or 10)
         if ticks:
             slider.setTickInterval(ticks)
-        slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
+            slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         slider.setValue(option.value)
         slider.valueChanged.connect(option.change)
         self._add_widget(slider)
@@ -670,7 +676,7 @@ class PlotCanvas(QtWidgets.QWidget):
         plot.clear()
 
         self.plot(plot)
-
+    
     def plot(self, ax):
         pass
 
@@ -692,16 +698,16 @@ class ApplicationWindow(QtWidgets.QWidget):
         self.sidebar = Sidebar()
 
         if content:
-        vsplitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
-        vsplitter.addWidget(self.content)
-        vsplitter.addWidget(self.console)
-        vsplitter.setStretchFactor(0, 1)
-        vsplitter.setStretchFactor(1, 0)
+            vsplitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
+            vsplitter.addWidget(self.content)
+            vsplitter.addWidget(self.console)
+            vsplitter.setStretchFactor(0, 1)
+            vsplitter.setStretchFactor(1, 0)
 
         hsplitter = QtWidgets.QSplitter()
         hsplitter.addWidget(self.sidebar)
         if content:
-        hsplitter.addWidget(vsplitter)
+            hsplitter.addWidget(vsplitter)
         else:
             hsplitter.addWidget(self.console)
         hsplitter.setStretchFactor(0, 0)
@@ -712,12 +718,12 @@ class ApplicationWindow(QtWidgets.QWidget):
     @classmethod
     def run(cls, *args, **kwargs):
         app = QtWidgets.QApplication([])
-
+        
         app.setStyle(QtWidgets.QStyleFactory.create('Fusion'))
 
         widget = cls(*args, **kwargs)
         widget._build(widget)
-
+        
         widget.show()
 
         widget._started()
