@@ -679,7 +679,7 @@ class PlotCanvas(QtWidgets.QWidget):
 
 
 class ApplicationWindow(QtWidgets.QWidget):
-    def __init__(self, title='', size=(1200, 800)):
+    def __init__(self, title='', size=(1200, 800), content=None):
         super(ApplicationWindow, self).__init__()
 
         self.resize(*size)
@@ -690,10 +690,11 @@ class ApplicationWindow(QtWidgets.QWidget):
         layout.setSpacing(0)
         self.setLayout(layout)
 
-        self.content = PlotCanvas(self._draw)
+        self.content = content(parent=self) if content else None
         self.console = Console()
         self.sidebar = Sidebar()
 
+        if content:
         vsplitter = QtWidgets.QSplitter(QtCore.Qt.Vertical)
         vsplitter.addWidget(self.content)
         vsplitter.addWidget(self.console)
@@ -702,7 +703,10 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         hsplitter = QtWidgets.QSplitter()
         hsplitter.addWidget(self.sidebar)
+        if content:
         hsplitter.addWidget(vsplitter)
+        else:
+            hsplitter.addWidget(self.console)
         hsplitter.setStretchFactor(0, 0)
         hsplitter.setStretchFactor(1, 1)
 
@@ -779,15 +783,8 @@ class ApplicationWindow(QtWidgets.QWidget):
     def _build(self, context):
         sidebar_builder = WidgetBuilder(self.sidebar._ground, context)
         self._build_sidebar(sidebar_builder)
-        self.redraw()
 
     def _build_sidebar(self, builder):
-        pass
-
-    def redraw(self):
-        self.content.redraw()
-
-    def _draw(self, plot):
         pass
 
     def _started(self):
