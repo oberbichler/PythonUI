@@ -636,9 +636,7 @@ class Sidebar(QtWidgets.QScrollArea):
 
 
 class PlotCanvas(QtWidgets.QWidget):
-    _redraw = QtCore.pyqtSignal(object)
-
-    def __init__(self, redraw):
+    def __init__(self, parent):
         super(PlotCanvas, self).__init__()
 
         layout = QtWidgets.QGridLayout()
@@ -659,8 +657,6 @@ class PlotCanvas(QtWidgets.QWidget):
         plot.set_aspect('equal')
         self._plot = plot
 
-        self._redraw.connect(redraw)
-
     def redraw(self):
         plot = self._plot
 
@@ -673,9 +669,10 @@ class PlotCanvas(QtWidgets.QWidget):
 
         plot.clear()
 
-        self._redraw.emit(plot)
+        self.plot(plot)
 
-        self._canvas.draw()
+    def plot(self, ax):
+        pass
 
 
 class ApplicationWindow(QtWidgets.QWidget):
