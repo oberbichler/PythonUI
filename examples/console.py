@@ -19,7 +19,7 @@ class Window(ui.ApplicationWindow):
               Fore.CYAN + 'cyan',
               Fore.WHITE + 'or just white',
               Style.RESET_ALL)
-        print(Style.BRIGHT + 'write ' + Fore.RED + 'bold ' + Fore.GREEN + 
+        print(Style.BRIGHT + 'write ' + Fore.RED + 'bold ' + Fore.GREEN +
               'text ' + Fore.BLUE + 'in ' + Fore.YELLOW + 'different ' +
               Fore.MAGENTA + 'colors' + Style.RESET_ALL)
         print(Style.BRIGHT + Fore.BLACK + Back.GREEN + ' or ' + Back.WHITE +

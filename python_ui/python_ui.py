@@ -4,7 +4,6 @@
 from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg,
                                                 NavigationToolbar2QT)
 from matplotlib.figure import Figure
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 from PyQt5 import Qt, QtCore, QtGui, QtWidgets
 import inspect
 import numpy as np
@@ -462,13 +461,13 @@ class WidgetBuilder(object):
         update_table(option.value)
 
         option.connect(update_table)
-        table_widget.cellChanged.connect(lambda i, j: update_cell(i, j))
+        table_widget.cellChanged.connect(update_cell)
 
         self._add_widget(table_widget)
 
-    '''
+    """
     contributed by Mahmoud Zidan
-    '''
+    """
     def add_slider(self, label, option, minimum=None, maximum=None, ticks=None):
         if label:
             label_widget = QtWidgets.QLabel(label)
@@ -718,12 +717,12 @@ class ApplicationWindow(QtWidgets.QWidget):
     @classmethod
     def run(cls, *args, **kwargs):
         app = QtWidgets.QApplication([])
-        
+
         app.setStyle(QtWidgets.QStyleFactory.create('Fusion'))
 
         widget = cls(*args, **kwargs)
         widget._build(widget)
-        
+
         widget.show()
 
         widget._started()
@@ -757,19 +756,25 @@ class ApplicationWindow(QtWidgets.QWidget):
 
         dialog.show()
 
-    def show_open_file_dialog(self, title=None, filters=None):
-        filter = ';;'.join(filters) if isinstance(filters, list) else filters
+    def show_open_file_dialog(self, title=None, extension_filters=None):
+        if isinstance(extension_filters, list):
+            extension_filter = ';;'.join(extension_filters)
+        else:
+            extension_filter = extension_filters
 
         result = QtWidgets.QFileDialog.getOpenFileName(self, title,
-                                                       filter=filter)
+                                                       filter=extension_filter)
 
         return result
 
-    def show_save_file_dialog(self, title=None, filters=None):
-        filter = ';;'.join(filters) if isinstance(filters, list) else filters
+    def show_save_file_dialog(self, title=None, extension_filters=None):
+        if isinstance(extension_filters, list):
+            extension_filter = ';;'.join(extension_filters)
+        else:
+            extension_filter = extension_filters
 
         result = QtWidgets.QFileDialog.getSaveFileName(self, title,
-                                                       filter=filter)
+                                                       filter=extension_filter)
 
         return result
 
