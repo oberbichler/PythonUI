@@ -345,6 +345,7 @@ class WidgetBuilder(object):
         if option:
             option.connect(combobox_widget.setCurrentIndex)
             combobox_widget.currentIndexChanged.connect(option.change)
+            combobox_widget.setCurrentIndex(option.value)
 
     def add_radiobuttons(self, items, option):
         button_group = QtWidgets.QButtonGroup(self._ground.parent())
