@@ -486,6 +486,9 @@ class WidgetBuilder(object):
         slider.valueChanged.connect(option.change)
         self._add_widget(slider)
 
+    def add_wheel(self, option, unit=1):
+        wheel = Wheel(option, unit)
+        self._add_widget(wheel)
 
 class Widget(QtWidgets.QWidget):
     def __init__(self):
@@ -681,6 +684,29 @@ class PlotCanvas(QtWidgets.QWidget):
     
     def plot(self, ax):
         pass
+
+
+class Wheel(QtWidgets.QDial):
+    def __init__(self, option, unit=1):
+        super().__init__()
+        self.setMaximum(359)
+        self.setValue(180)
+        self._value = 180
+        self.unit = unit
+        self.valueChanged.connect(self._valueChanged)            
+        self.setWrapping(True)
+        self.option = option
+
+    def _valueChanged(self, value):
+        old_angle = self._value / 180 * np.pi
+        new_angle = value / 180 * np.pi
+
+        delta = np.arccos(np.cos(old_angle - new_angle))
+        s = np.sign(-np.sin(old_angle - new_angle))
+
+        self._value = int(self._value + s * delta * 180 / np.pi)
+
+        self.option.value = self._value / 180 * self.unit
 
 
 class ApplicationWindow(QtWidgets.QWidget):

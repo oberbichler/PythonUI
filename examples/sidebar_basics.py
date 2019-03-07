@@ -41,6 +41,11 @@ class Window(ui.ApplicationWindow):
             action=lambda value: print(f'You set slider to "{value}"'),
         )
 
+        self.wheel_value = ui.Option(
+            value=0,
+            action=lambda value: print(f'You set wheel to "{value}"'),
+        )
+
     def _build_sidebar(self, builder):
         # Add some controls to the sidebar
 
@@ -97,6 +102,11 @@ class Window(ui.ApplicationWindow):
             minimum=-5.0,
             maximum=10.0,
             ticks=5,
+        )
+
+        builder.add_wheel(
+            option=builder.context.wheel_value,
+            unit=2,
         )
 
         builder.add_stretch()
