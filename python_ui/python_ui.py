@@ -301,17 +301,17 @@ class WidgetBuilder(object):
 
         if dtype is int:
             spinbox_widget = QtWidgets.QSpinBox()
-            spinbox_widget.setValue(option.value)
             spinbox_widget.setMinimum(minimum or -2147483648)
             spinbox_widget.setMaximum(maximum or 2147483647)
             spinbox_widget.setSingleStep(step or 1)
+            spinbox_widget.setValue(option.value)
         elif dtype is float:
             spinbox_widget = QtWidgets.QDoubleSpinBox()
-            spinbox_widget.setValue(option.value)
             spinbox_widget.setMinimum(minimum or -Qt.qInf())
             spinbox_widget.setMaximum(maximum or Qt.qInf())
             spinbox_widget.setSingleStep(step or 0.1)
             spinbox_widget.setDecimals(decimals or 5)
+            spinbox_widget.setValue(option.value)
         else:
             raise ValueError(f'Invalid dtype "{dtype.__name__}"')
 
@@ -348,6 +348,7 @@ class WidgetBuilder(object):
         if option:
             option.connect(combobox_widget.setCurrentIndex)
             combobox_widget.currentIndexChanged.connect(option.change)
+            combobox_widget.setCurrentIndex(option.value)
 
     def add_radiobuttons(self, items, option):
         button_group = QtWidgets.QButtonGroup(self._ground.parent())
