@@ -45,6 +45,9 @@ class Option(QtCore.QObject):
     def change(self, value):
         self.value = value
 
+    def __call__(self):
+        return self.value
+
     @property
     def value(self):
         return self._value
