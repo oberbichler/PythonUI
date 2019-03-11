@@ -505,9 +505,30 @@ class WidgetBuilder(object):
         slider.valueChanged.connect(option.change)
         self._add_widget(slider)
 
-    def add_wheel(self, option, unit=1):
-        wheel = Wheel(option, unit)
-        self._add_widget(wheel)
+    def add_wheel(self, option, unit=0.1, default=1, label=None):
+        if label:
+            label_widget = QtWidgets.QLabel(label)
+            self._add_widget(label_widget)
+
+        row_widget = QtWidgets.QWidget()
+        row_layout = QtWidgets.QHBoxLayout()
+        row_layout.setContentsMargins(0, 0, 0, 0)
+        row_widget.setLayout(row_layout)
+        self._add_widget(row_widget)
+
+        wheel = Wheel(unit, default)
+        wheel.scaled_value_changed.connect(option.change)
+        option.connect(wheel.set_scaled_value)
+
+        textbox_widget = QtWidgets.QLineEdit()
+        textbox_widget.setValidator(NumberValidator(textbox_widget, default))
+        textbox_widget.setText(str(option.value))
+        row_layout.addWidget(wheel)
+        row_layout.addWidget(textbox_widget, 1)
+
+        textbox_widget.editingFinished.connect(
+            lambda: option.change(float(textbox_widget.text())))
+        option.connect(lambda value: textbox_widget.setText(str(value)))
 
 class Widget(QtWidgets.QWidget):
     def __init__(self):
@@ -706,27 +727,50 @@ class PlotCanvas(QtWidgets.QWidget):
 
 
 class Wheel(QtWidgets.QDial):
-    def __init__(self, option, unit=1):
-        super().__init__()
-        self.setMaximum(359)
-        self.setValue(180)
-        self._value = 180
-        self.unit = unit
-        self.valueChanged.connect(self._valueChanged)            
-        self.setWrapping(True)
-        self.option = option
+    scaled_value_changed = QtCore.pyqtSignal(float)
 
-    def _valueChanged(self, value):
+    def __init__(self, unit, default=1):
+        super(Wheel, self).__init__()
+
+        self.setMinimum(-180)
+        self.setMaximum(179)
+        self.setValue(0)
+        self.setWrapping(True)
+
+        self.scaled_value = default
+        self.default = default
+        self._value = default
+        self.unit = unit
+
+        self.valueChanged.connect(self.on_value_changed)
+
+    def on_value_changed(self, value):
         old_angle = self._value / 180 * np.pi
         new_angle = value / 180 * np.pi
 
-        delta = np.arccos(np.cos(old_angle - new_angle))
-        s = np.sign(-np.sin(old_angle - new_angle))
+        delta = np.round(np.arccos(np.cos(old_angle - new_angle)) * 180 / np.pi)
+        sign = np.sign(-np.sin(old_angle - new_angle))
 
-        self._value = int(self._value + s * delta * 180 / np.pi)
+        _value = int(self._value + sign * delta)
 
-        self.option.value = self._value / 180 * self.unit
+        if self._value == _value:
+            return
 
+        self._value = _value
+        self.scaled_value = _value * self.unit
+
+        self.scaled_value_changed.emit(self.scaled_value)
+
+    def set_scaled_value(self, scaled_value):
+        if scaled_value == self.scaled_value:
+            return
+
+        value = (180 + (scaled_value - self.default) / self.unit) % 360 - 180
+
+        self._value = value
+        self.scaled_value = scaled_value
+
+        self.setValue(value)
 
 class ApplicationWindow(QtWidgets.QWidget):
     def __init__(self, title='', size=(1200, 800), content=None):
