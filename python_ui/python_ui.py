@@ -721,6 +721,8 @@ class PlotCanvas(QtWidgets.QWidget):
         plot.clear()
 
         self.plot(plot)
+
+        self._canvas.draw()
     
     def plot(self, ax):
         pass
