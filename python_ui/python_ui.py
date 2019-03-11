@@ -28,6 +28,24 @@ class _GenericValidator(QtGui.QValidator):
     def fixup(self, string):
         return self._validate(string)
 
+class NumberValidator(QtGui.QValidator):
+    def __init__(self, parent, default=0):
+        super(NumberValidator, self).__init__(parent)
+        self.default = default
+
+    def validate(self, string, pos):
+        if string == '' or string == '-':
+            return QtGui.QValidator.Intermediate, string, pos
+
+        try:
+            float(string)
+            return QtGui.QValidator.Acceptable, string, pos
+        except ValueError:
+            return QtGui.QValidator.Invalid, string, pos
+
+    def fixup(self, string):
+        return str(self.default)
+
 
 class Option(QtCore.QObject):
     _changed = QtCore.pyqtSignal(object)
