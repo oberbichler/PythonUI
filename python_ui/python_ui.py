@@ -232,6 +232,16 @@ class Console(QtWidgets.QTextEdit):
         pass
 
 
+def copy_to_clipboard(content):
+    cb = QtWidgets.QApplication.clipboard()
+
+    if isinstance(content, np.ndarray):
+        content = '\n'.join('\t'.join(map(str, row)) for row in content)
+
+    cb.clear(mode=cb.Clipboard)
+    cb.setText(content, mode=cb.Clipboard)
+
+
 class WidgetBuilder(object):
     def __init__(self, ground, context):
         self._ground = ground
