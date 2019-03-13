@@ -774,6 +774,7 @@ class Wheel(QtWidgets.QDial):
 
         self.setValue(value)
 
+
 class ApplicationWindow(QtWidgets.QWidget):
     def __init__(self, title='', size=(1200, 800), content=None):
         super(ApplicationWindow, self).__init__()
