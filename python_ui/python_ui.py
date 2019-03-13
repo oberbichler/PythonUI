@@ -530,6 +530,7 @@ class WidgetBuilder(object):
             lambda: option.change(float(textbox_widget.text())))
         option.connect(lambda value: textbox_widget.setText(str(value)))
 
+
 class Widget(QtWidgets.QWidget):
     def __init__(self):
         super(Widget, self).__init__()
