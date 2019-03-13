@@ -81,6 +81,11 @@ class Window(ui.ApplicationWindow):
             readonly=True,
         )
 
+        builder.add_button(
+            label='Copy array to clipboard',
+            action=lambda: ui.copy_to_clipboard(self.array.value),
+        )
+
         builder.add_stretch()
 
 
